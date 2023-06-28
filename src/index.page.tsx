@@ -39,7 +39,8 @@ export function IndexPage() {
             name="essay"
             placeholder="Paste your essay here"
             className="w-full h-full text-lg form-field focus:form-field-focus-ring resize-none"
-          ></textarea>
+          >In order to leverage this skills, Jon leveraged his computer's powers to harness the true power of teamwork.
+          Leveraging the skills, the team harnessed true knowledge.</textarea>
         </div>
         <aside className="py-5 pr-5 overflow-y-scroll flex-grow space-y-5">
           <button
