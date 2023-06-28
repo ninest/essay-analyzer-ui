@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, ReactNode, useState } from "react";
 import { Title } from "./components/title";
 import { EssayAnalysis } from "./essay-analysis";
 import { getEssayAnalysis } from "./essay-analysis/api";
@@ -23,6 +23,14 @@ export function IndexPage() {
       setLoading(false);
     }
   };
+
+  const lemmas = Object.keys(analysis?.repeatedWords.counter ?? {});
+  const lemmasRepeatedMoreThanOnce = [];
+  lemmas.forEach((lemma) => {
+    const count = analysis?.repeatedWords.counter[lemma]!;
+    if (count > 1) lemmasRepeatedMoreThanOnce.push(lemma);
+  });
+
   return (
     <>
       <form onSubmit={onSubmit} className="h-screen flex space-x-5">
@@ -31,7 +39,7 @@ export function IndexPage() {
             name="essay"
             placeholder="Paste your essay here"
             className="w-full h-full text-lg form-field focus:form-field-focus-ring resize-none"
-          />
+          ></textarea>
         </div>
         <aside className="py-5 pr-5 overflow-y-scroll flex-grow space-y-5">
           <button
@@ -41,12 +49,19 @@ export function IndexPage() {
           >
             {loading ? "Loading ..." : "Analyze"}
           </button>
-          <section className="border rounded-md p-3">
-            <Title level={2}>Readability</Title>
-          </section>
-          <section className="border rounded-md p-3">
-            <Title level={2}>Repeated words</Title>
-          </section>
+
+          <InfoBlock title="Readability"></InfoBlock>
+          <InfoBlock title="Repeated words">
+            <Title level={3}>Words repeated more than once:</Title>
+            {lemmasRepeatedMoreThanOnce.map((word) => {
+              return (
+                <div>
+                  {word}: {analysis?.repeatedWords.counter[word]} times
+                </div>
+              );
+            })}
+          </InfoBlock>
+
           {analysis && (
             <section>
               <Debug data={analysis} />
@@ -55,5 +70,14 @@ export function IndexPage() {
         </aside>
       </form>
     </>
+  );
+}
+
+function InfoBlock({ title, children }: { title: string; children?: ReactNode }) {
+  return (
+    <section className="border rounded-md p-3">
+      <Title level={2}>{title}</Title>
+      {children && <div className="mt-2">{children}</div>}
+    </section>
   );
 }

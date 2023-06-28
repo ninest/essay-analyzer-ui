@@ -17,7 +17,7 @@ export function Title({ level = 2, children, ...props }: TitleProps) {
           // "text-4xl font-bold": level == 1,
           "text-3xl font-black": level == 1,
           "text-xl font-bold": level == 2,
-          "text-base font-bold": level == 3,
+          "text-cl font-semibold": level == 3,
         },
         props.className
       )}
