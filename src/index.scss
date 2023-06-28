@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .form-field {
+    @apply p-2 rounded-lg text-gray-700 bg-gray-100 text-base;
+    @apply appearance-none;
+    @apply focus:outline-none
+  }
+  .form-field-focus-ring {
+    @apply rounded-lg outline-none ring-2 ring-offset-2 ring-primary-200;
+  }
+}
