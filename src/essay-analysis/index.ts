@@ -1,4 +1,4 @@
-export interface EssayAnalysis {
+export interface RawEssayAnalysis {
   repeatedWords: {
     counter: Record<string, number>;
     lemmas: Record<string, string[]>;

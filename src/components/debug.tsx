@@ -7,7 +7,7 @@ interface DebugProps extends ComponentProps<"div"> {
 }
 
 export const Debug = ({ data, showInProd = false, className }: DebugProps) => {
-  const isDev = import.meta.env.DEV;
+  const isDev = import.meta.env.DEV || window.location.href.includes("debug");
   const show = isDev || showInProd;
   return (
     <>
