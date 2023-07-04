@@ -27,7 +27,7 @@ export function IndexPage() {
 
   return (
     <>
-      <form onSubmit={onSubmit} className="h-screen flex flex-col md:flex-row md:space-x-5">
+      <form onSubmit={onSubmit} className="h-[100dvh] flex flex-col md:flex-row md:space-x-5">
         <div className="h-[60%] p-2 md:h-full md:w-9/12 md:p-5 md:pr-0">
           <textarea
             name="essay"
