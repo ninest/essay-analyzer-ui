@@ -1,4 +1,4 @@
-import { FormEvent, ReactNode, useState } from "react";
+import { ComponentProps, FormEvent, ReactNode, useState } from "react";
 import { Debug } from "./components/debug";
 import { Title } from "./components/title";
 import { getRawEssayAnalysis } from "./essay-analysis/api";
@@ -60,12 +60,21 @@ export function IndexPage() {
           <InfoBlock title="Repeated words">
             {analysis && (
               <>
-                {analysis.repeatedWords.lemmasRepeatedMoreThanOnce.map((word) => {
-                  const count = analysis.repeatedWords.lemmasCount[word];
-                  return <DataWithCount key={word} title={
-                    <div className="font-mono text-sm">{word}</div>
-                  } count={count} countSuffix="words" />;
-                })}
+                {analysis.repeatedWords.lemmasRepeatedMoreThanOnce.length === 0 ? (
+                  <Blank>No repeated words</Blank>
+                ) : (
+                  analysis.repeatedWords.lemmasRepeatedMoreThanOnce.map((word) => {
+                    const count = analysis.repeatedWords.lemmasCount[word];
+                    return (
+                      <DataWithCount
+                        key={word}
+                        title={<div className="font-mono text-sm">{word}</div>}
+                        count={count}
+                        countSuffix="words"
+                      />
+                    );
+                  })
+                )}
               </>
             )}
           </InfoBlock>
@@ -113,4 +122,8 @@ function DataWithCount({ title, count, countSuffix }: { title: ReactNode; count:
       </div>
     </div>
   );
+}
+
+function Blank({ children }: ComponentProps<"div">) {
+  return <div className="italic text-gray-500 text-sm">{children}</div>;
 }
