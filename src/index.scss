@@ -4,7 +4,7 @@
 
 @layer components {
   .form-field {
-    @apply p-2 rounded-lg text-gray-700 bg-gray-100 text-base;
+    @apply p-2 rounded-lg text-gray-700 bg-gray-50 text-base;
     @apply appearance-none;
     @apply focus:outline-none
   }

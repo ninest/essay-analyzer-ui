@@ -6,6 +6,9 @@ export interface EssayAnalysis {
     lemmas: string[];
     lemmasRepeatedMoreThanOnce: string[];
     lemmasCount: Record<string, number>;
+
+    // Words that should be highlighted
+    wordsRepeatedMoreThanOnce: string[];
   };
   readability: {
     fleschReadingEase: number;
@@ -36,6 +39,13 @@ export function getEssayAnalysis(analysis: null | RawEssayAnalysis): null | Essa
     lemmasCount[lemma] = analysis.repeatedWords.counter[lemma] ?? 0;
   });
 
+  let wordsToHighlight = [...lemmasRepeatedMoreThanOnce];
+  console.log(lemmas);
+  lemmas.forEach((lemma) => {
+    if (lemmasRepeatedMoreThanOnce.includes(lemma))
+      wordsToHighlight = [...wordsToHighlight, ...analysis.repeatedWords["lemmas"][lemma]];
+  });
+
   // Readability
   const fleschReadingEase = Math.round(analysis.readability.fleschReadingEase);
   const fleschReadingEaseDescription = getFleschReadingEaseDescription(fleschReadingEase)!;
@@ -50,7 +60,16 @@ export function getEssayAnalysis(analysis: null | RawEssayAnalysis): null | Essa
     averageWordsPerSentence: round2dp(analysis.readability.averageWordsPerSentence),
   };
 
-  return { repeatedWords: { lemmas, lemmasRepeatedMoreThanOnce, lemmasCount }, readability, stats };
+  return {
+    repeatedWords: {
+      lemmas,
+      lemmasRepeatedMoreThanOnce,
+      lemmasCount,
+      wordsRepeatedMoreThanOnce: wordsToHighlight,
+    },
+    readability,
+    stats,
+  };
 }
 
 interface ReadingEaseDescription {

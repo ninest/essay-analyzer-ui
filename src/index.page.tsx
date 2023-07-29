@@ -3,8 +3,11 @@ import { Debug } from "./components/debug";
 import { Title } from "./components/title";
 import { getRawEssayAnalysis } from "./essay-analysis/api";
 import { EssayAnalysis, getEssayAnalysis } from "./essay-analysis/functions";
+import { EssayTextarea } from "./components/essay-textarea";
 
 export function IndexPage() {
+  const [essay, setEssay] = useState("");
+  // const [analysis, setAnalysis] = useState<null | EssayAnalysis>(null);
   const [analysis, setAnalysis] = useState<null | EssayAnalysis>(null);
   const [loading, setLoading] = useState(false);
 
@@ -12,10 +15,8 @@ export function IndexPage() {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const text = formData.get("essay") as string;
     try {
-      const rawEssayAnalysis = await getRawEssayAnalysis(text);
+      const rawEssayAnalysis = await getRawEssayAnalysis(essay);
       const essayAnalysis = getEssayAnalysis(rawEssayAnalysis);
       setAnalysis(essayAnalysis);
     } catch (error) {
@@ -29,17 +30,23 @@ export function IndexPage() {
     <>
       <form onSubmit={onSubmit} className="h-[100dvh] flex flex-col md:flex-row md:space-x-5">
         <div className="h-[60%] p-2 md:h-full md:w-9/12 md:p-5 md:pr-0">
-          <textarea
+          <EssayTextarea
+            containerClassName="h-full"
             name="essay"
             placeholder="Paste your essay here"
-            className="w-full h-full text-lg form-field focus:form-field-focus-ring resize-none"
-          ></textarea>
+            value={essay}
+            onChange={(e) => setEssay(e.target.value)}
+            highlightedWords={analysis?.repeatedWords.wordsRepeatedMoreThanOnce.map((word) => ({
+              caseSensitive: false,
+              word,
+            }))}
+          />
         </div>
         <aside className="h-[40%] md:h-full p-2 md:w-3/12 md:py-5 md:pr-5 overflow-y-scroll md:flex-grow space-y-5">
           <button
             disabled={loading}
             type="submit"
-            className="w-full font-semibold flex items-center align-start p-3 rounded-md bg-primary-600 text-gray-200"
+            className=" font-semibold inline-flex items-center align-start p-3 rounded-lg bg-primary-600 text-gray-200"
           >
             {loading ? "Loading ..." : "Analyze"}
           </button>
@@ -70,7 +77,7 @@ export function IndexPage() {
                         key={word}
                         title={<div className="font-mono text-sm">{word}</div>}
                         count={count}
-                        countSuffix="words"
+                        countSuffix="times"
                       />
                     );
                   })
